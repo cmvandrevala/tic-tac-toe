@@ -2,6 +2,6 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.core :refer :all]))
 
-(describe "a test"
-  (it "FIXME, I fail."
-    (should= 0 1)))
+(describe "A generic passing test"
+  (it "returns true for two equal numbers"
+    (should= 0 0)))
