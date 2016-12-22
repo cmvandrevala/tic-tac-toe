@@ -23,9 +23,13 @@
     (let [board (mark :foo 9 empty-board)]
       (should= empty-board board)))
 
-  (it "informs a user if a cell is empty"
-    (should= true (is-empty? 5 empty-board)))
+  (it "returns empty if a cell has not been marked"
+    (should= :empty (cell-status 5 empty-board)))
 
-  (it "informs a user if a cell is filled"
-    (let [board (mark :player-two 3 (mark :player-one 1 empty-board))]
-      (should= false (is-empty? 1 board)))))
+  (it "returns the player who has marked a cell"
+    (let [board (mark :player_foo 5 empty-board)]
+      (should= :player_foo (cell-status 5 board))))
+
+  (it "returns the correct player out of two options"
+    (let [board (mark :p2 6 (mark :p1 3 empty-board))]
+      (should= :p2 (cell-status 6 board)))))
