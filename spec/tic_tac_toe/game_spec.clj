@@ -16,7 +16,7 @@
       (let [board (b/mark :player-two 1 (b/mark :player-one 7 b/empty-board))]
         (should= :player-one (current-player board)))))
 
-(describe "a game turn"
+(describe "a move"
 
   (it "makes the first move"
     (let [board (move 0)]

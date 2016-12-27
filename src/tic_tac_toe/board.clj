@@ -1,4 +1,5 @@
-(ns tic-tac-toe.board)
+(ns tic-tac-toe.board
+  (:require clojure.set))
 
 (def minimum-cell-index 0)
 (def maximum-cell-index 8)
