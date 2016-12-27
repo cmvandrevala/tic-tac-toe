@@ -3,6 +3,7 @@
 
 (def minimum-cell-index 0)
 (def maximum-cell-index 8)
+(def total-number-of-cells 9)
 (def empty-board [])
 
 (defn- in-range? [cell]
@@ -15,3 +16,7 @@
 (defn cell-status [cell board]
   (let [filled-cells (into {} (map clojure.set/map-invert board))]
     (if (get filled-cells cell) (get filled-cells cell) :empty)))
+
+(defn filled? [board]
+    (let [filled-cells (into {} (map clojure.set/map-invert board))]
+      (= (count (set (keys filled-cells))) total-number-of-cells)))

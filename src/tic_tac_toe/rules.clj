@@ -5,10 +5,6 @@
                             [0 3 6] [1 4 7] [2 5 8]
                             [0 4 8] [2 4 6]])
 
-(defn- full-board [board]
-  (let [filled-cells (into {} (map clojure.set/map-invert board))]
-    (= (count (set (keys filled-cells))) 9)))
-
 (defn- cells-filled [board cells]
   (let [statuses (map b/cell-status cells (repeat 3 board))]
     (and
@@ -19,4 +15,4 @@
   (let [cells-filled-on-board (partial cells-filled board)]
     (and
       (= (set (map cells-filled-on-board winning-combinations)) #{false})
-      (not (full-board board)))))
+      (not (b/filled? board)))))
