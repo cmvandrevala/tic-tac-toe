@@ -33,3 +33,65 @@
   (it "returns the correct player out of two options"
     (let [board (mark :p2 6 (mark :p1 3 empty-board))]
       (should= :p2 (cell-status 6 board)))))
+
+(describe "a filled board"
+
+  (it "returns false for an empty board"
+      (should= false (filled? empty-board)))
+
+  (it "returns false for a board with a few marks"
+      (let [board (mark :p1 1 (mark :p2 2 (mark :p3 3 empty-board)))]
+        (should= false (filled? board))))
+
+  (it "returns false for a non-filled board, even if there is a winner"
+      (let [board (mark :player-one 0 (mark :player-one 1 (mark :player-one 2 empty-board)))]
+        (should= false (filled? board))))
+
+  (it "returns true for a filled board with a winner"
+      (let [board (mark :p 0 (mark :p 1 (mark :p 2 (mark :p 3 (mark :p 4 (mark :p 5 (mark :p 6 (mark :p 7 (mark :p 8 empty-board)))))))))]
+        (should= true (filled? board))))
+
+  (it "returns true for a filled board with no winner"
+      (let [board (mark :p1 0 (mark :p2 1 (mark :p3 2 (mark :p4 3 (mark :p5 4 (mark :p6 5 (mark :p7 6 (mark :p8 7 (mark :p9 8 empty-board)))))))))]
+        (should= true (filled? board)))))
+
+(describe "formatted marks on the board"
+
+  (it "returns an empty board if there are no marks"
+      (should= (str " 0 | 1 | 2 \n"
+                    "-----------\n"
+                    " 3 | 4 | 5 \n"
+                    "-----------\n"
+                    " 6 | 7 | 8 \n") (current-board)))
+
+  (it "returns a board with a mark for player one"
+      (let [board (mark :player-one 1 empty-board)]
+        (should= (str " 0 | X | 2 \n"
+                      "-----------\n"
+                      " 3 | 4 | 5 \n"
+                      "-----------\n"
+                      " 6 | 7 | 8 \n") (current-board board))))
+
+  (it "returns a board with a mark for player two"
+      (let [board (mark :player-two 7 empty-board)]
+        (should= (str " 0 | 1 | 2 \n"
+                      "-----------\n"
+                      " 3 | 4 | 5 \n"
+                      "-----------\n"
+                      " 6 | O | 8 \n") (current-board board))))
+
+  (it "returns a board with two marks"
+      (let [board (mark :player-one 5 (mark :player-two 0 empty-board))]
+        (should= (str " O | 1 | 2 \n"
+                      "-----------\n"
+                      " 3 | 4 | X \n"
+                      "-----------\n"
+                      " 6 | 7 | 8 \n") (current-board board))))
+
+  (it "returns a board with many marks"
+      (let [board (mark :player-one 1 (mark :player-two 8 (mark :player-one 5 (mark :player-two 0 empty-board))))]
+        (should= (str " O | X | 2 \n"
+                      "-----------\n"
+                      " 3 | 4 | X \n"
+                      "-----------\n"
+                      " 6 | 7 | O \n") (current-board board)))))

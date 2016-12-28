@@ -7,6 +7,13 @@
   ([player moves] (mark-many player moves board/empty-board))
   ([player moves game-board] (if (empty? moves) game-board (mark-many player (rest moves) (board/mark player (first moves) game-board)))))
 
+(def tie-game-board
+  (board/mark :player-one 7
+    (board/mark :player-two 8
+      (board/mark :player-two 6
+        (mark-many :player-two [1 3 4]
+          (mark-many :player-one [0 2 5]))))))
+
 (describe "game in progress"
 
   (it "returns true for an empty game"
@@ -42,3 +49,27 @@
   (it "returns false for a tie game"
     (let [full-board (mark-many :b [1 4 5 6] (mark-many :a [0 2 3 7 8]))]
       (should= false (game-in-progress? full-board)))))
+
+(describe "game status"
+
+  (it "returns :in-progress for an empty board"
+    (should= :in-progress (game-status board/empty-board)))
+
+  (it "returns :in-progress for a partially filled board"
+    (let [board (mark-many :player-one [1 2 7])]
+      (should= :in-progress (game-status board))))
+
+  (it "returns :player-one-wins if player one wins horizontally"
+    (let [board (mark-many :player-one [0 1 2])]
+      (should= :player-one-wins (game-status board))))
+
+  (it "returns :player-one-wins if player one wins vertically"
+    (let [board (mark-many :player-one [4 1 7])]
+      (should= :player-one-wins (game-status board))))
+
+  (it "returns :player-two-wins if player two wins vertically"
+    (let [board (mark-many :player-two [2 5 8])]
+      (should= :player-two-wins (game-status board))))
+
+  (it "returns :tie if the game is a tie"
+    (should= :tie (game-status tie-game-board))))
