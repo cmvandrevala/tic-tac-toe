@@ -20,3 +20,18 @@
 (defn filled? [board]
     (let [filled-cells (into {} (map clojure.set/map-invert board))]
       (= (count (set (keys filled-cells))) total-number-of-cells)))
+
+(def horizontal-bar "\n-----------\n")
+
+(defn- formatted-mark [cell board]
+  (let [status (cell-status cell board)]
+    (case status
+      :player-one " X "
+      :player-two " O "
+      (str " " cell " "))))
+
+(defn current-board
+  ([] (current-board empty-board))
+  ([board] (str (formatted-mark 0 board) "|" (formatted-mark 1 board) "|" (formatted-mark 2 board) horizontal-bar
+                (formatted-mark 3 board) "|" (formatted-mark 4 board) "|" (formatted-mark 5 board) horizontal-bar
+                (formatted-mark 6 board) "|" (formatted-mark 7 board) "|" (formatted-mark 8 board) "\n")))

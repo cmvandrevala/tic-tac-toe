@@ -15,5 +15,5 @@
   ([cell board] (b/mark (current-player board) cell board)))
 
 (defn play
-  ([] (play (move (string-to-number (read-line)))))
-  ([board] (println board) (play (move (string-to-number (read-line)) board))))
+  ([] (println (b/current-board)) (play (move (string-to-number (read-line)))))
+  ([board] (println (b/current-board board)) (play (move (string-to-number (read-line)) board))))
