@@ -33,3 +33,17 @@
   (it "makes many moves"
     (let [board (move 5 (move 4 (move 6 (move 3))))]
       (should= [{:player-one 3} {:player-two 6} {:player-one 4} {:player-two 5}] board))))
+
+(describe "convert a string to number"
+
+  (it "converts a valid string input to a number"
+      (should= 5 (string-to-number "5")))
+
+  (it "converts an out-of-bounds input to a number"
+      (should= 10 (string-to-number "10")))
+
+  (it "converts a decimal value to an integer via the floor function"
+      (should= 12 (string-to-number "12.5")))
+
+  (it "sets a string equal to an out-of-bounds integer"
+      (should= 10 (string-to-number "abcde"))))

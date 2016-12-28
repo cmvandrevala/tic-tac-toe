@@ -3,9 +3,9 @@
   (require [tic-tac-toe.rules :as r])
   (require [tic-tac-toe.messages :as m]))
 
-(defn- string-to-number [str]
+(defn string-to-number [str]
   (let [n (read-string str)]
-    (if (number? n) n nil)))
+    (if (number? n) (int n) 10)))
 
 (defn current-player
   ([] :player-one)
