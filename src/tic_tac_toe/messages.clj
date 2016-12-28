@@ -10,3 +10,9 @@
 
 (defn current-player [player]
   (if (= player :player-one) player-one player-two))
+
+(defn game-status [game-status]
+  (case game-status
+    :player-one-wins "Player one wins!"
+    :player-two-wins "Player two wins!"
+    "It's a tie!"))

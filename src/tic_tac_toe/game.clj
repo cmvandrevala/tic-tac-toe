@@ -21,6 +21,11 @@
    (println (b/current-board))
    (play (move (string-to-number (read-line)))))
   ([board]
-   (println (str "\n" (m/current-player (current-player board)) "\n"))
-   (println (b/current-board board))
-   (play (move (string-to-number (read-line)) board))))
+   (if (r/game-in-progress? board)
+     (do
+      (println (str "\n" (m/current-player (current-player board)) "\n"))
+      (println (b/current-board board))
+      (play (move (string-to-number (read-line)) board)))
+     (do
+       (println (str "\n" m/game-over "\n" (m/game-status (r/game-status board)) "\n"))
+       (println (b/current-board board))))))

@@ -20,4 +20,13 @@
       (should= "It is player one's move." (current-player :player-one)))
 
   (it "returns a message for player two's turn, given the correct player"
-      (should= "It is player two's move." (current-player :player-two))))
+      (should= "It is player two's move." (current-player :player-two)))
+
+  (it "returns a message when player one wins"
+      (should= "Player one wins!" (game-status :player-one-wins)))
+
+  (it "returns a message when player two wins"
+      (should= "Player two wins!" (game-status :player-two-wins)))
+
+  (it "returns a message when the game is a tie"
+      (should= "It's a tie!" (game-status :tie))))
