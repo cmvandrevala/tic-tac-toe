@@ -95,3 +95,20 @@
                       " 3 | 4 | X \n"
                       "-----------\n"
                       " 6 | 7 | O \n") (current-board board)))))
+
+(describe "remaining spaces on the board"
+
+  (it "returns all of the cells if no moves have been made"
+      (should= [0 1 2 3 4 5 6 7 8] (remaining-spaces empty-board)))
+
+  (it "returns the remaining cells if the first one has been marked"
+      (should= [1 2 3 4 5 6 7 8] (remaining-spaces (mark :player-one 0 empty-board))))
+
+  (it "returns the remaining cells if a random cell has been marked"
+      (should= [0 1 2 3 5 6 7 8] (remaining-spaces (mark :player-two 4 empty-board))))
+
+  (it "returns the remaining cells if two have been marked"
+      (should= [0 1 2 3 5 6 7] (remaining-spaces (mark :b 8 (mark :a 4 empty-board)))))
+
+  (it "returns the remaining cells if many have been marked"
+      (should= [1 2 3 5 7] (remaining-spaces (mark :b 6 (mark :a 0 (mark :b 8 (mark :a 4 empty-board))))))))
