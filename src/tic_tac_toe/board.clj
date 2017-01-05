@@ -21,6 +21,9 @@
     (let [filled-cells (into {} (map clojure.set/map-invert board))]
       (= (count (set (keys filled-cells))) total-number-of-cells)))
 
+(defn remaining-spaces [board]
+  (filter #(= :empty (cell-status % board)) (range total-number-of-cells)))
+
 (def horizontal-bar "\n-----------\n")
 
 (defn- formatted-mark [cell board]
