@@ -26,13 +26,16 @@
 (defn dumb-computer [board]
   (c/first-available-spot-ai (current-player board) board))
 
+(defn execute-play-loop [play-fn player-one player-two board]
+  (case (current-player board)
+    :player-one (play-fn player-one player-two (player-one board))
+    :player-two (play-fn player-one player-two (player-two board))))
+
 (defn play [player-one player-two board]
    (if (r/game-in-progress? board)
      (do
        (print-board board)
-       (case (current-player board)
-         :player-one (play player-one player-two (player-one board))
-         :player-two (play player-one player-two (player-two board))))
+       (execute-play-loop play player-one player-two board))
      (do
        (println (str "\n" m/game-over "\n" (m/game-status (r/game-status board)) "\n"))
        (println (b/current-board board)))))
