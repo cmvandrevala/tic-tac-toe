@@ -1,7 +1,8 @@
 (ns tic-tac-toe.game
   (require [tic-tac-toe.board :as b])
   (require [tic-tac-toe.rules :as r])
-  (require [tic-tac-toe.messages :as m]))
+  (require [tic-tac-toe.messages :as m])
+  (require [tic-tac-toe.computer-ai :as c]))
 
 (defn string-to-number [str]
   (let [n (read-string str)]
@@ -15,17 +16,26 @@
   ([cell] (b/mark (current-player) cell b/empty-board))
   ([cell board] (b/mark (current-player board) cell board)))
 
-(defn play
-  ([]
-   (println (str "\n" m/start-game "\n" m/player-one "\n"))
-   (println (b/current-board))
-   (play (move (string-to-number (read-line)))))
-  ([board]
+(defn- print-board [board]
+  (println (str "\n" (m/current-player (current-player board)) "\n"))
+  (println (b/current-board board)))
+
+(defn human [board]
+  (move (string-to-number (read-line)) board))
+
+(defn dumb-computer [board]
+  (c/first-available-spot-ai (current-player board) board))
+
+(defn execute-play-loop [play-fn player-one player-two board]
+  (case (current-player board)
+    :player-one (play-fn player-one player-two (player-one board))
+    :player-two (play-fn player-one player-two (player-two board))))
+
+(defn play [player-one player-two board]
    (if (r/game-in-progress? board)
      (do
-      (println (str "\n" (m/current-player (current-player board)) "\n"))
-      (println (b/current-board board))
-      (play (move (string-to-number (read-line)) board)))
+       (print-board board)
+       (execute-play-loop play player-one player-two board))
      (do
        (println (str "\n" m/game-over "\n" (m/game-status (r/game-status board)) "\n"))
-       (println (b/current-board board))))))
+       (println (b/current-board board)))))

@@ -3,6 +3,8 @@
             [tic-tac-toe.game :refer :all]
             [tic-tac-toe.board :as b]))
 
+(defn return-board [player-one player-two board] board)
+
 (describe "the current player"
 
   (it "is :player-one at the beginning of the game"
@@ -47,3 +49,19 @@
 
   (it "sets a string equal to an out-of-bounds integer"
       (should= 10 (string-to-number "abcde"))))
+
+(describe "dumb computer"
+
+  (it "fills in the first cell of an empty board"
+      (should= [{:player-one 0}] (dumb-computer b/empty-board)))
+
+  (it "fills in the first cell if it is available"
+      (should= [{:player-one 5} {:player-two 0}] (dumb-computer (b/mark :player-one 5 b/empty-board)))))
+
+(describe "the play loop"
+
+  (it "performs the player-one action on a blank board"
+      (should= [{:player-one 0}] (execute-play-loop return-board (partial move 0) (partial move 1) b/empty-board)))
+
+  (it "performs the player-two action on a board with one move"
+      (should= [{:player-one 0} {:player-two 1}] (execute-play-loop return-board (partial move 0) (partial move 1) (b/mark :player-one 0 b/empty-board)))))

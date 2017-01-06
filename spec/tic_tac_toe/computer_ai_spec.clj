@@ -18,12 +18,10 @@
             starting-board (b/mark :player-one 5 b/empty-board)]
         (should= expected-output (first-available-spot-ai :player-two starting-board))))
 
-
   (it "takes index one if zero is unavailble"
       (let [expected-output (b/mark :player-two 1 (b/mark :player-one 0 b/empty-board))
             starting-board (b/mark :player-one 0 b/empty-board)]
         (should= expected-output (first-available-spot-ai :player-two starting-board))))
-
 
   (it "takes index two if zero and one are unavailble"
       (let [expected-output (b/mark :player-one 2 (b/mark :player-two 1 (b/mark :player-one 0 b/empty-board)))
