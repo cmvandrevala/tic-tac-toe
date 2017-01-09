@@ -38,3 +38,7 @@
   ([board] (str (formatted-mark 0 board) "|" (formatted-mark 1 board) "|" (formatted-mark 2 board) horizontal-bar
                 (formatted-mark 3 board) "|" (formatted-mark 4 board) "|" (formatted-mark 5 board) horizontal-bar
                 (formatted-mark 6 board) "|" (formatted-mark 7 board) "|" (formatted-mark 8 board) "\n")))
+
+(defn mark-many
+  ([player moves] (mark-many player moves empty-board))
+  ([player moves game-board] (if (empty? moves) game-board (mark-many player (rest moves) (mark player (first moves) game-board)))))

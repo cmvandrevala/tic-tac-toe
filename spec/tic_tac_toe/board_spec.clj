@@ -44,11 +44,11 @@
         (should= false (filled? board))))
 
   (it "returns false for a non-filled board, even if there is a winner"
-      (let [board (mark :player-one 0 (mark :player-one 1 (mark :player-one 2 empty-board)))]
+      (let [board (mark-many :player-one [0 1 2])]
         (should= false (filled? board))))
 
   (it "returns true for a filled board with a winner"
-      (let [board (mark :p 0 (mark :p 1 (mark :p 2 (mark :p 3 (mark :p 4 (mark :p 5 (mark :p 6 (mark :p 7 (mark :p 8 empty-board)))))))))]
+      (let [board (mark-many :p [0 1 2 3 4 5 6 7 8])]
         (should= true (filled? board))))
 
   (it "returns true for a filled board with no winner"
@@ -112,3 +112,17 @@
 
   (it "returns the remaining cells if many have been marked"
       (should= [1 2 3 5 7] (remaining-spaces (mark :b 6 (mark :a 0 (mark :b 8 (mark :a 4 empty-board))))))))
+
+(describe "marking many cells at once"
+
+  (it "can mark one cell"
+      (should= [{:player-one 2}] (mark-many :player-one [2])))
+
+  (it "can mark two cells"
+      (should= [{:p2 8} {:p2 7}] (mark-many :p2 [8 7])))
+
+  (it "can mark three cells"
+      (should= [{:p1 5} {:p1 6} {:p1 7}] (mark-many :p1 [5 6 7])))
+
+  (it "can be passed a board"
+      (should= [{:p1 5} {:p1 6} {:p1 7} {:p2 4} {:p2 3} ] (mark-many :p2 [4 3] (mark-many :p1 [5 6 7])))))

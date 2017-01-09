@@ -27,9 +27,9 @@
   (let [board-statuses (partial statuses board)
         cell-values (map set (map board-statuses winning-combinations))]
     (if (lazy-contains? cell-values #{:player-one})
-      :player-one-wins
+      :player-one
       (if (lazy-contains? cell-values #{:player-two})
-        :player-two-wins
+        :player-two
         (if (game-in-progress? board)
           :in-progress
           :tie)))))
