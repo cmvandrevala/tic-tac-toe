@@ -12,6 +12,11 @@
   ([] :player-one)
   ([board] (if (even? (count board)) :player-one :player-two)))
 
+(defn opponent [player]
+  (if (= player :player-one)
+    :player-two
+    :player-one))
+
 (defn move
   ([cell] (b/mark (current-player) cell b/empty-board))
   ([cell board] (b/mark (current-player board) cell board)))

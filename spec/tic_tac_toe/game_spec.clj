@@ -18,6 +18,14 @@
       (let [board (b/mark :player-two 1 (b/mark :player-one 7 b/empty-board))]
         (should= :player-one (current-player board)))))
 
+(describe "the opponent of a player"
+
+  (it "is :player-two if given :player-one"
+      (should= :player-two (opponent :player-one)))
+
+  (it "is :player-one if given :player-two"
+      (should= :player-one (opponent :player-two))))
+
 (describe "a move"
 
   (it "makes the first move"
