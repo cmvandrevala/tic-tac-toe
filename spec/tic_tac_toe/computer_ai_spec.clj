@@ -49,51 +49,72 @@
 
   (it "scores a horizontal winning move in the top row with a +1"
       (let [current-board (b/mark-many :player-one [0 1])]
-        (should= 1 (utility :player-one 2 current-board))))
+        (should= 1 (utility :player-one current-board 2))))
 
   (it "scores a horizontal winning move in the middle row with a +1"
       (let [current-board (b/mark-many :player-one [3 5])]
-        (should= 1 (utility :player-one 4 current-board))))
+        (should= 1 (utility :player-one current-board 4))))
 
   (it "scores a horizontal winning move in the bottom row with a +1"
       (let [current-board (b/mark-many :player-two [7 8])]
-        (should= 1 (utility :player-two 6 current-board))))
+        (should= 1 (utility :player-two current-board 6))))
 
   (it "scores a vertical winning move in the left column with a +1"
       (let [current-board (b/mark-many :player-two [0 3])]
-        (should= 1 (utility :player-two 6 current-board))))
+        (should= 1 (utility :player-two current-board 6))))
 
   (it "scores a vertical winning move in the middle column with a +1"
       (let [current-board (b/mark-many :player-two [4 1])]
-        (should= 1 (utility :player-two 7 current-board))))
+        (should= 1 (utility :player-two current-board 7))))
 
   (it "scores a vertical winning move in the right column with a +1"
       (let [current-board (b/mark-many :player-one [5 8])]
-        (should= 1 (utility :player-one 2 current-board))))
+        (should= 1 (utility :player-one current-board 2))))
 
   (it "scores a left diagonal move with a +1"
       (let [current-board (b/mark-many :player-one [0 4])]
-        (should= 1 (utility :player-one 8 current-board))))
+        (should= 1 (utility :player-one current-board 8))))
 
   (it "scores a right diagonal move with a +1"
       (let [current-board (b/mark-many :player-two [2 6])]
-        (should= 1 (utility :player-two 4 current-board))))
+        (should= 1 (utility :player-two current-board 4))))
 
   (it "scores a tie move with a 0"
       (let [current-board almost-tie-game-board]
-        (should= 0 (utility :player-one 7 current-board))))
+        (should= 0 (utility :player-one current-board 7))))
 
   (it "scores a tie move with a 0 (complementary board)"
       (let [current-board complementary-almost-tie-game-board]
-        (should= 0 (utility :player-two 7 current-board))))
+        (should= 0 (utility :player-two current-board 7))))
 
   (it "scores a winning move on a full board with a +1"
       (let [current-board almost-tie-game-board]
-        (should= 1 (utility :player-two 7 current-board))))
+        (should= 1 (utility :player-two current-board 7))))
 
   (it "scores a winning move on a full board with a +1 (complementary board)"
       (let [current-board complementary-almost-tie-game-board]
-        (should= 1 (utility :player-one 7 current-board)))))
+        (should= 1 (utility :player-one current-board 7)))))
+
+(describe "utilities for remaining cells"
+
+  (it "returns nine nils if the board is empty"
+      (let [expected-output [{0 nil} {1 nil} {2 nil} {3 nil} {4 nil} {5 nil} {6 nil} {7 nil} {8 nil}]]
+        (should= expected-output (utilities-for-remaining-cells :player-one b/empty-board))))
+
+  (it "returns eight nils if the board has one move"
+      (let [expected-output [{0 nil} {2 nil} {3 nil} {4 nil} {5 nil} {6 nil} {7 nil} {8 nil}]]
+        (should= expected-output (utilities-for-remaining-cells :player-one (b/mark-many :player-one [1])))))
+
+  (it "returns no entries if the board has no available moves"
+        (should= [] (utilities-for-remaining-cells :player-one (b/mark :player-one 7 almost-tie-game-board))))
+
+  (it "returns the correct output if the player can win in the top row"
+      (let [expected-output [{2 1} {3 nil} {4 nil} {5 nil} {6 nil} {7 nil} {8 nil}]]
+        (should= expected-output (utilities-for-remaining-cells :player-one (b/mark-many :player-one [0 1])))))
+
+  (it "returns the correct output if the player can win in the left column"
+      (let [expected-output [{1 nil} {2 nil} {3 1} {4 nil} {5 nil} {7 nil} {8 nil}]]
+        (should= expected-output (utilities-for-remaining-cells :player-two (b/mark-many :player-two [6 0]))))))
 
 (describe "an unbeatable computer player"
 
