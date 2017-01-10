@@ -28,8 +28,11 @@
 (defn human [board]
   (move (string-to-number (read-line)) board))
 
-(defn dumb-computer [board]
+(defn easy-computer [board]
   (c/first-available-spot-ai (current-player board) board))
+
+(defn hard-computer [board]
+  (c/unbeatable-ai (current-player board) board))
 
 (defn execute-play-loop [play-fn player-one player-two board]
   (case (current-player board)

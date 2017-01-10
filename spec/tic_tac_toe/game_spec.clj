@@ -58,13 +58,13 @@
   (it "sets a string equal to an out-of-bounds integer"
       (should= 10 (string-to-number "abcde"))))
 
-(describe "dumb computer"
+(describe "easy computer"
 
   (it "fills in the first cell of an empty board"
-      (should= [{:player-one 0}] (dumb-computer b/empty-board)))
+      (should= [{:player-one 0}] (easy-computer b/empty-board)))
 
   (it "fills in the first cell if it is available"
-      (should= [{:player-one 5} {:player-two 0}] (dumb-computer (b/mark :player-one 5 b/empty-board)))))
+      (should= [{:player-one 5} {:player-two 0}] (easy-computer (b/mark :player-one 5 b/empty-board)))))
 
 (describe "the play loop"
 
