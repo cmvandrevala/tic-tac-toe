@@ -101,4 +101,18 @@
   (it "returns the score from a specific set of grandchildren if it is the maximal score"
     (let [top-node (add-child (add-many-children nil-node [5 -5]) nil-node)
           game-tree (add-child (add-many-children nil-node [10 -10]) top-node)]
-      (should= -5 (score game-tree)))))
+      (should= -5 (score game-tree))))
+
+
+  (it "scores a complicated game tree in the correct manner"
+    (let [c1 (add-many-children nil-node [5 1 -5])
+          c2 (add-many-children nil-node [-1 2])
+          c3 (add-many-children nil-node [3 1])
+          c4 (add-many-children nil-node [0])
+          c5 (add-many-children nil-node [-1 2])
+          c6 (add-many-children nil-node [3 -5])
+          b1 (add-child c1 (add-child c2 nil-node))
+          b2 (add-child c3 nil-node)
+          b3 (add-child c4 (add-child c5 (add-child c6 nil-node)))
+          a (add-child b1 (add-child b2 (add-child b3 nil-node)))]
+        (should= 3 (score a)))))
