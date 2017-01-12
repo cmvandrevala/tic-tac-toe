@@ -1,7 +1,8 @@
 (ns tic-tac-toe.computer-ai-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.computer-ai :refer :all]
-            [tic-tac-toe.board :as b]))
+            [tic-tac-toe.board :as b]
+            [tic-tac-toe.game-tree :as gt]))
 
 (def almost-tie-game-board
     (b/mark :player-two 8
@@ -44,6 +45,23 @@
       (let [expected-output (b/mark :player-two 1 (b/mark :player-one 3 (b/mark :player-one 0 b/empty-board)))
             starting-board (b/mark :player-one 3 (b/mark :player-one 0 b/empty-board))]
         (should= expected-output (first-available-spot-ai :player-two starting-board)))))
+
+(describe "the utility function for minimax"
+
+  (it "returns nil for a game in progress"
+      (should= nil (utility :player-one b/empty-board)))
+
+  (it "returns 1 when the player wins"
+      (let [current-board (b/mark-many :player-one [0 1 2])]
+        (should= 1 (utility :player-one current-board))))
+
+  (it "returns -1 when the opponent wins"
+      (let [current-board (b/mark-many :player-two [1 4 7])]
+        (should= -1 (utility :player-one current-board))))
+
+  (it "returns 0 for a tie"
+      (let [current-board (b/mark :player-one 7 almost-tie-game-board)]
+        (should= 0 (utility :player-two current-board)))))
 
 (describe "utility of a move in minimax"
 

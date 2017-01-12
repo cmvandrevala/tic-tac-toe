@@ -2,14 +2,7 @@
   (:require [speclj.core :refer :all]
             [tic-tac-toe.game-tree :refer :all]))
 
-(def nil-node (node {:value nil}))
 (defn test-node [value] (node {:value value}))
-
-(defn add-many-children [parent-node values]
-  (loop [children (reverse values) root parent-node]
-    (if (empty? children)
-      root
-      (recur (rest children) (add-child (test-node (first children)) root)))))
 
 (describe "building a game tree"
 

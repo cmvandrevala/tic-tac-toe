@@ -2,10 +2,18 @@
 
 (defn node [params] params)
 
+(def nil-node (node {:value nil}))
+
 (defn add-child [params parent-node]
   (if (nil? (:children parent-node))
     (assoc parent-node :children [params])
     (assoc parent-node :children (into [] (concat [params] (:children parent-node))))))
+
+(defn add-many-children [parent-node values]
+  (loop [children (reverse values) root parent-node]
+    (if (empty? children)
+      root
+      (recur (rest children) (add-child (node {:value (first children)}) root)))))
 
 (defn values-of-children [node]
   (let [children (:children node)]

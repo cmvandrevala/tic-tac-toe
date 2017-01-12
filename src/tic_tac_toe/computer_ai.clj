@@ -1,6 +1,7 @@
 (ns tic-tac-toe.computer-ai
   (require [tic-tac-toe.board :as b])
-  (require [tic-tac-toe.rules :as r]))
+  (require [tic-tac-toe.rules :as r])
+  (require [tic-tac-toe.game-tree :as gt]))
 
 (defn first-available-spot-ai [player board]
   (let [spaces (b/remaining-spaces board)]
@@ -18,11 +19,19 @@
       statuses
       (recur (rest spaces) (conj statuses (r/game-status (b/mark player (first spaces) board)))))))
 
+(defn utility [player board]
+  (let [status (r/game-status board)]
+    (condp = status
+        player 1
+        :tie 0
+        (opponent player) -1
+        :in-progress nil)))
+
 (defn- opponent-can-win-next-turn [player board]
   (let [statuses (game-status-for-each-move player board)]
     (lazy-contains? statuses player)))
 
-(defn- sorted-moves-and-utilities [moves-and-utilities]
+(defn- sort-moves-and-utilities [moves-and-utilities]
   (sort-by #(first (vals %1)) moves-and-utilities))
 
 (defn minimax [player opponent board cell]
@@ -39,7 +48,7 @@
   (map #(hash-map %1 (minimax player (opponent player) board %1)) (b/remaining-spaces board)))
 
 (defn best-move [moves-and-utilities]
-  (let [extract-move (comp first keys last sorted-moves-and-utilities)]
+  (let [extract-move (comp first keys last sort-moves-and-utilities)]
     (extract-move moves-and-utilities)))
 
 (defn unbeatable-ai [player board]
