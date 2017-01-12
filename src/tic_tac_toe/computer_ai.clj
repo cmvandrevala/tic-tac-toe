@@ -18,29 +18,25 @@
       statuses
       (recur (rest spaces) (conj statuses (r/game-status (b/mark player (first spaces) board)))))))
 
-(defn- player-can-win-this-turn [player board]
+(defn- opponent-can-win-next-turn [player board]
   (let [statuses (game-status-for-each-move player board)]
     (lazy-contains? statuses player)))
 
-(defn- eliminate-negative-utilities [moves-and-utilities]
-  (if (empty? (filter #(not (= (first (vals %1)) -1)) moves-and-utilities))
-    moves-and-utilities
-    (filter #(not (= (first (vals %1)) -1)) moves-and-utilities)))
-
 (defn- sorted-moves-and-utilities [moves-and-utilities]
-  (let [moves-without-negative-utility (eliminate-negative-utilities moves-and-utilities)]
-    (sort-by #(first (vals %1)) moves-without-negative-utility)))
+  (sort-by #(first (vals %1)) moves-and-utilities))
 
-(defn utility [player board cell]
-  (let [status (r/game-status (b/mark player cell board))]
+(defn minimax [player opponent board cell]
+  (let [marked-board (b/mark player cell board)
+        status (r/game-status marked-board)
+        move-tree (map #(minimax opponent player marked-board %1) (b/remaining-spaces marked-board))]
     (cond
       (= status player) 1
       (= status :tie) 0
-      (and (= status :in-progress) (player-can-win-this-turn (opponent player) (b/mark player cell board))) -1
-      :else nil)))
+      (opponent-can-win-next-turn opponent marked-board) -1
+      :else (first move-tree))))
 
-(defn utilities-for-remaining-cells [player board]
-  (map #(hash-map %1 (utility player board %1)) (b/remaining-spaces board)))
+(defn- utilities-for-remaining-cells [player board]
+  (map #(hash-map %1 (minimax player (opponent player) board %1)) (b/remaining-spaces board)))
 
 (defn best-move [moves-and-utilities]
   (let [extract-move (comp first keys last sorted-moves-and-utilities)]
@@ -48,4 +44,5 @@
 
 (defn unbeatable-ai [player board]
   (let [moves-and-utilities (utilities-for-remaining-cells player board)]
+    (println moves-and-utilities)
     (b/mark player (best-move moves-and-utilities) board)))
