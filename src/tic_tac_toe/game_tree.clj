@@ -8,10 +8,14 @@
     (assoc parent-node :children (into [] (concat [params] (:children parent-node))))))
 
 (defn values-of-children [node]
-  (let [children (get node :children)]
-    (vec (map #(if (nil? %) (do (println (values-of-children %)) (values-of-children %)) %) (vec (map #(get % :value) children))))))
+  (let [children (:children node)]
+    (vec (map #(if (nil? %) (values-of-children %) %) (vec (map #(:value %) children))))))
 
-(defn score [tree]
-  (if (nil? (get tree :value))
-    (apply max (values-of-children tree))
-    (get tree :value)))
+(defn score
+  ([tree] (score tree 0))
+  ([tree level]
+   (if (and (nil? (:value tree)) (even? level))
+      (apply max (map #(score % (inc level)) (:children tree)))
+      (if (and (nil? (:value tree)) (odd? level))
+        (apply min (map #(score % (inc level)) (:children tree)))
+        (get tree :value)))))
