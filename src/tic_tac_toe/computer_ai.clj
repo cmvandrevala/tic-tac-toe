@@ -44,5 +44,4 @@
 
 (defn unbeatable-ai [player board]
   (let [moves-and-utilities (utilities-for-remaining-cells player board)]
-    (println moves-and-utilities)
     (b/mark player (best-move moves-and-utilities) board)))
