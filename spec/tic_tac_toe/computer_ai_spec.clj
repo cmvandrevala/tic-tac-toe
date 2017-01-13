@@ -83,7 +83,28 @@
   (it "builds an appropriate tree for two open cells (player two's turn)"
     (let [current-board (b/mark-many :player-two [2 3 8] (b/mark-many :player-one [0 4 5 7]))
           expected-output {:value nil :children [{:player :player-two :cell 6 :value nil :children [{:player :player-one :cell 1 :value -1}]} {:player :player-two :cell 1 :value nil :children [{:player :player-one :cell 6 :value 0}]}]}]
-      (should= expected-output (generate-game-tree :player-two current-board)))))
+      (should= expected-output (generate-game-tree :player-two current-board))))
+
+  (it "builds an appropriate tree for three open cells (player one's turn)"
+    (let [current-board (b/mark-many :player-two [1 4 8] (b/mark-many :player-one [2 3 5]))
+          d1 (gt/node {:player :player-one :cell 7 :value 0})
+          d2 (gt/node {:player :player-one :cell 0 :value 0})
+          c1 (gt/node {:player :player-two :cell 6 :value nil})
+          c2 (gt/node {:player :player-two :cell 7 :value -1})
+          c3 (gt/node {:player :player-two :cell 0 :value -1})
+          c4 (gt/node {:player :player-two :cell 7 :value -1})
+          c5 (gt/node {:player :player-two :cell 0 :value -1})
+          c6 (gt/node {:player :player-two :cell 6 :value nil})
+          b1 (gt/node {:player :player-one :cell 0 :value nil})
+          b2 (gt/node {:player :player-one :cell 6 :value nil})
+          b3 (gt/node {:player :player-one :cell 7 :value nil})
+          c1c (gt/add-child d1 c1)
+          c6c (gt/add-child d2 c6)
+          b1c (gt/add-child c2 (gt/add-child c1c b1))
+          b2c (gt/add-child c4 (gt/add-child c3 b2))
+          b3c (gt/add-child c6c (gt/add-child c5 b3))
+          expected-output (gt/add-child b3c (gt/add-child b2c (gt/add-child b1c gt/nil-node)))]
+      (should= expected-output (generate-game-tree :player-one current-board)))))
 
 (describe "utility of a move in minimax"
 

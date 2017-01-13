@@ -31,7 +31,6 @@
   ([player board] (generate-game-tree player board gt/nil-node 0))
   ([player board node level]
    (loop [remaining-spaces (b/remaining-spaces board) current-tree node]
-     (println current-tree)
      (if (empty? remaining-spaces)
        current-tree
        (let [current-space (first remaining-spaces)
