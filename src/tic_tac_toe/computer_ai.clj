@@ -27,6 +27,20 @@
         (opponent player) -1
         :in-progress nil)))
 
+(defn generate-game-tree
+  ([player board] (generate-game-tree player board gt/nil-node 0))
+  ([player board node level]
+   (loop [remaining-spaces (b/remaining-spaces board) current-tree node]
+     (println current-tree)
+     (if (empty? remaining-spaces)
+       current-tree
+       (let [current-space (first remaining-spaces)
+             marked-board (b/mark player current-space board)
+             value (utility player marked-board)]
+           (if (r/game-in-progress? marked-board)
+             (recur (rest remaining-spaces) (gt/add-child {:player player :cell current-space :value value :children (:children (generate-game-tree (opponent player) marked-board gt/nil-node (inc level)))} current-tree))
+             (recur (rest remaining-spaces) (gt/add-child {:player player :cell current-space :value (if (even? level) value (* -1 value))} current-tree))))))))
+
 (defn- opponent-can-win-next-turn [player board]
   (let [statuses (game-status-for-each-move player board)]
     (lazy-contains? statuses player)))

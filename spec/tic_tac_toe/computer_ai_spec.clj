@@ -5,10 +5,10 @@
             [tic-tac-toe.game-tree :as gt]))
 
 (def almost-tie-game-board
-    (b/mark :player-two 8
-      (b/mark :player-two 6
-        (b/mark-many :player-two [1 3 4]
-          (b/mark-many :player-one [0 2 5])))))
+    (b/mark :player-two 2
+      (b/mark :player-two 0
+        (b/mark-many :player-two [7 3 4]
+          (b/mark-many :player-one [6 8 5])))))
 
 (def complementary-almost-tie-game-board
     (b/mark :player-one 8
@@ -60,8 +60,30 @@
         (should= -1 (utility :player-one current-board))))
 
   (it "returns 0 for a tie"
-      (let [current-board (b/mark :player-one 7 almost-tie-game-board)]
+      (let [current-board (b/mark :player-one 1 almost-tie-game-board)]
         (should= 0 (utility :player-two current-board)))))
+
+(describe "generating a game tree"
+
+  (it "returns an empty hash-map if the board is full"
+    (should= {:value nil} (generate-game-tree :player-one (b/mark-many :p (range 9)))))
+
+  (it "returns a single node if the board is almost full (player one ties)"
+    (should= {:value nil :children [{:player :player-one :cell 1 :value 0}]} (generate-game-tree :player-one almost-tie-game-board)))
+
+  (it "returns a single node if the board is almost full (player two wins)"
+    (should= {:value nil :children [{:player :player-two :cell 1 :value 1}]} (generate-game-tree :player-two almost-tie-game-board)))
+
+  (it "returns a single node if the board is almost full (player two ties)"
+    (should= {:value nil :children [{:player :player-two :cell 7 :value 0}]} (generate-game-tree :player-two complementary-almost-tie-game-board)))
+
+  (it "returns a single node if the board is almost full (player one wins)"
+    (should= {:value nil :children [{:player :player-two :cell 7 :value 0}]} (generate-game-tree :player-two complementary-almost-tie-game-board)))
+
+  (it "builds an appropriate tree for two open cells (player two's turn)"
+    (let [current-board (b/mark-many :player-two [2 3 8] (b/mark-many :player-one [0 4 5 7]))
+          expected-output {:value nil :children [{:player :player-two :cell 6 :value nil :children [{:player :player-one :cell 1 :value -1}]} {:player :player-two :cell 1 :value nil :children [{:player :player-one :cell 6 :value 0}]}]}]
+      (should= expected-output (generate-game-tree :player-two current-board)))))
 
 (describe "utility of a move in minimax"
 
@@ -99,7 +121,7 @@
 
   (it "scores a tie move with a 0"
       (let [current-board almost-tie-game-board]
-        (should= 0 (minimax :player-one :player-two current-board 7))))
+        (should= 0 (minimax :player-one :player-two current-board 1))))
 
   (it "scores a tie move with a 0 (complementary board)"
       (let [current-board complementary-almost-tie-game-board]
@@ -107,7 +129,7 @@
 
   (it "scores a winning move on a full board with a +1"
       (let [current-board almost-tie-game-board]
-        (should= 1 (minimax :player-two :player-one current-board 7))))
+        (should= 1 (minimax :player-two :player-one current-board 1))))
 
   (it "scores a winning move on a full board with a +1 (complementary board)"
       (let [current-board complementary-almost-tie-game-board]
@@ -155,12 +177,12 @@
 
   (it "takes a tie move if it is the only move available"
       (let [current-board almost-tie-game-board
-            expected-output (b/mark :player-one 7 almost-tie-game-board)]
+            expected-output (b/mark :player-one 1 almost-tie-game-board)]
         (should= expected-output (unbeatable-ai :player-one current-board))))
 
   (it "takes a winning move if it is the only move available"
       (let [current-board almost-tie-game-board
-            expected-output (b/mark :player-two 7 almost-tie-game-board)]
+            expected-output (b/mark :player-two 1 almost-tie-game-board)]
         (should= expected-output (unbeatable-ai :player-two current-board))))
 
   (it "takes a tie move if it is the only move available (complementary board)"
