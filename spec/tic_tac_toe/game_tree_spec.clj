@@ -48,7 +48,7 @@
           root-node (add-child child-node nil-node)]
       (should= [1 2 3 4 5] (values-of-children (first (:children root-node)))))))
 
-(describe "traversing a game tree"
+(describe "scoring a game tree"
 
   (it "returns the value of a node if it is the only one in the tree"
     (let [game-tree (test-node 5)]
