@@ -262,52 +262,7 @@
             expected-output (b/mark :player-one 7 complementary-almost-tie-game-board)]
         (should= expected-output (unbeatable-ai :player-one current-board))))
 
-  (xit "takes a winning move out of two choices (player one)"
-      (let [current-board (b/mark-many :player-two [1 4 2 8] (b/mark-many :player-one [0 3 5]))
-            expected-output (b/mark :player-one 6 current-board)]
-          (should= expected-output (unbeatable-ai :player-one current-board))))
-
-  (xit "takes a winning move out of two choices (player two)"
-      (let [current-board (b/mark-many :player-two [1 4 5 8] (b/mark-many :player-one [0 2 3]))
-            expected-output (b/mark :player-two 7 current-board)]
-          (should= expected-output (unbeatable-ai :player-two current-board))))
-
-  (xit "takes a horizontal winning move when it is available"
-      (let [current-board (b/mark-many :player-one [0 1])
-            expected-output (b/mark-many :player-one [0 1 2])]
-        (should= expected-output (unbeatable-ai :player-one current-board))))
-
-  (xit "takes a vertical winning move when it is available"
-      (let [current-board (b/mark-many :player-one [0 2] (b/mark-many :player-two [1 4]))
-            expected-output (b/mark-many :player-two [1 4 7])]
-        (should= expected-output (unbeatable-ai :player-two current-board))))
-
-  (it "takes a diagonal winning move when it is available"
-      (let [current-board (b/mark-many :player-one [0 4])
-            expected-output (b/mark-many :player-one [0 4 8])]
-        (should= expected-output (unbeatable-ai :player-one current-board))))
-
   (it "it is a fatalistic computer player"
       (let [current-board (b/mark-many :player-one [0 1 3])
             expected-output (b/mark :player-two 8 (b/mark-many :player-one [0 1 3]))]
-        (should= expected-output (unbeatable-ai :player-two current-board))))
-
-  (xit "blocks an opponent who is about to win diagonally"
-      (let [current-board (b/mark-many :player-one [0 7] (b/mark-many :player-two [4 6]))
-            expected-output (b/mark-many :player-one [0 7 2] (b/mark-many :player-two [4 6]))]
-        (should= expected-output (unbeatable-ai :player-one current-board))))
-
-  (xit "picks a winning spot if two spots are available"
-      (let [current-board (b/mark-many :player-one [0 1 3])
-            expected-output (b/mark-many :player-one [0 1 3 6])]
-        (should= expected-output (unbeatable-ai :player-one current-board))))
-
-  (xit "picks a winning spot over blocking a win (player one)"
-      (let [current-board (b/mark-many :player-two [6 7] (b/mark-many :player-one [3 4]))
-            expected-output (b/mark :player-one 5 (b/mark-many :player-two [6 7] (b/mark-many :player-one [3 4])))]
-        (should= expected-output (unbeatable-ai :player-one current-board))))
-
-  (xit "picks a winning spot over blocking a win (player two)"
-      (let [current-board (b/mark-many :player-two [6 7] (b/mark-many :player-one [3 4]))
-            expected-output (b/mark-many :player-two [6 7 8] (b/mark-many :player-one [3 4]))]
         (should= expected-output (unbeatable-ai :player-two current-board)))))
