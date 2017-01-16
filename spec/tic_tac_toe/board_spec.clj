@@ -59,43 +59,43 @@
 (describe "formatted marks on the board"
 
   (it "returns an empty board if there are no marks"
-      (should= (str " 0 | 1 | 2 \n"
-                    "-----------\n"
-                    " 3 | 4 | 5 \n"
-                    "-----------\n"
-                    " 6 | 7 | 8 \n") (current-board)))
+      (should= (str " 0 " vertical-bar " 1 " vertical-bar " 2 "
+                    horizontal-bar
+                    " 3 " vertical-bar " 4 " vertical-bar " 5 "
+                    horizontal-bar
+                    " 6 " vertical-bar " 7 " vertical-bar " 8 \n") (current-board)))
 
   (it "returns a board with a mark for player one"
       (let [board (mark :player-one 1 empty-board)]
-        (should= (str " 0 |" (c/style " X " :red) "| 2 \n"
-                      "-----------\n"
-                      " 3 | 4 | 5 \n"
-                      "-----------\n"
-                      " 6 | 7 | 8 \n") (current-board board))))
+        (should= (str " 0 " vertical-bar (c/style " X " :red) vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar " 5 "
+                      horizontal-bar
+                      " 6 " vertical-bar " 7 " vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with a mark for player two"
       (let [board (mark :player-two 7 empty-board)]
-        (should= (str " 0 | 1 | 2 \n"
-                      "-----------\n"
-                      " 3 | 4 | 5 \n"
-                      "-----------\n"
-                      " 6 |" (c/style " O " :green) "| 8 \n") (current-board board))))
+        (should= (str " 0 " vertical-bar " 1 " vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar " 5 "
+                      horizontal-bar
+                      " 6 " vertical-bar (c/style " O " :green) vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with two marks"
       (let [board (mark :player-one 5 (mark :player-two 0 empty-board))]
-        (should= (str (c/style " O " :green) "| 1 | 2 \n"
-                      "-----------\n"
-                      " 3 | 4 |" (c/style " X " :red) "\n"
-                      "-----------\n"
-                      " 6 | 7 | 8 \n") (current-board board))))
+        (should= (str (c/style " O " :green) vertical-bar " 1 " vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar (c/style " X " :red) ""
+                      horizontal-bar
+                      " 6 " vertical-bar " 7 " vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with many marks"
       (let [board (mark :player-one 1 (mark :player-two 8 (mark :player-one 5 (mark :player-two 0 empty-board))))]
-        (should= (str (c/style " O " :green) "|" (c/style " X " :red) "| 2 \n"
-                      "-----------\n"
-                      " 3 | 4 |" (c/style " X " :red) "\n"
-                      "-----------\n"
-                      " 6 | 7 |" (c/style " O " :green) "\n") (current-board board)))))
+        (should= (str (c/style " O " :green) vertical-bar (c/style " X " :red) vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar (c/style " X " :red)
+                      horizontal-bar
+                      " 6 " vertical-bar " 7 " vertical-bar (c/style " O " :green) "\n") (current-board board)))))
 
 (describe "remaining spaces on the board"
 
@@ -128,10 +128,16 @@
   (it "can be passed a board"
       (should= [{:p1 5} {:p1 6} {:p1 7} {:p2 4} {:p2 3} ] (mark-many :p2 [4 3] (mark-many :p1 [5 6 7])))))
 
-(describe "player symbols"
+(describe "console symbols"
 
   (it "returns an X for player one"
       (should= (c/style " X " :red) player-one-symbol))
 
   (it "returns an O for player two"
-      (should= (c/style " O " :green) player-two-symbol)))
+      (should= (c/style " O " :green) player-two-symbol))
+
+  (it "returns a colored horizontal bar"
+      (should= (c/style "\n-----------\n" :white) horizontal-bar))
+
+  (it "returns a colored vertical bar"
+      (should= (c/style "|" :white) vertical-bar)))
