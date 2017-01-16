@@ -34,11 +34,14 @@
 (defn- sort-moves-and-utilities [moves-and-utilities]
   (sort-by #(first (vals %1)) moves-and-utilities))
 
-(defn minimax [player board cell]
-  (gt/score (generate-game-tree player board)))
+(defn minimax [player cell board]
+  (let [marked-board (b/mark player cell board)]
+    (if (b/filled? marked-board)
+      (utility player marked-board)
+      (* -1 (gt/score (generate-game-tree (opponent player) marked-board))))))
 
 (defn- utilities-for-remaining-cells [player board]
-  (map #(hash-map %1 (minimax player board %1)) (b/remaining-spaces board)))
+  (map #(hash-map %1 (minimax player %1 board)) (b/remaining-spaces board)))
 
 (defn best-move [moves-and-utilities]
   (let [extract-move (comp first keys last sort-moves-and-utilities)]

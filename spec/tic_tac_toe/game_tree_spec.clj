@@ -96,6 +96,18 @@
           game-tree (add-child (add-many-children nil-node [10 -10]) top-node)]
       (should= -5 (score game-tree))))
 
+  (it "scores a game tree with two moves left (tie over loss)"
+    (let [game-tree {:value nil :children [{:player :player-two :cell 6 :value nil :children [{:player :player-one :cell 1 :value -1}]} {:player :player-two :cell 1 :value nil :children [{:player :player-one :cell 6 :value 0}]}]}]
+      (should= 0 (score game-tree))))
+
+  (it "scores a game tree with two moves left (win over loss)"
+    (let [game-tree {:value nil :children [{:player :player-two :cell 6 :value nil :children [{:player :player-one :cell 1 :value 1}]} {:player :player-two :cell 1 :value nil :children [{:player :player-one :cell 6 :value -1}]}]}]
+      (should= 1 (score game-tree))))
+
+  (it "scores a game tree with two moves left (two potential wins)"
+    (let [game-tree {:value nil :children [{:player :player-two :cell 6 :value nil :children [{:player :player-one :cell 1 :value 1}]} {:player :player-two :cell 1 :value nil :children [{:player :player-one :cell 6 :value 1}]}]}]
+      (should= 1 (score game-tree))))
+
   (it "scores a complicated game tree in the correct manner"
     (let [c1 (add-many-children nil-node [5 1 -5])
           c2 (add-many-children nil-node [-1 2])
