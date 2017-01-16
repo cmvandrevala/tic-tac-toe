@@ -1,10 +1,16 @@
 (ns tic-tac-toe.board
-  (:require clojure.set))
+  (:require clojure.set)
+  (require [clansi :as c]))
 
 (def minimum-cell-index 0)
 (def maximum-cell-index 8)
 (def total-number-of-cells 9)
 (def empty-board [])
+
+(def player-one-symbol (c/style " X " :red))
+(def player-two-symbol (c/style " O " :green))
+(def horizontal-bar (c/style "\n-----------\n" :white))
+(def vertical-bar (c/style "|" :white))
 
 (defn- in-range? [cell]
   (and (>= cell minimum-cell-index) (<= cell maximum-cell-index)))
@@ -24,17 +30,19 @@
 (defn remaining-spaces [board]
   (filter #(= :empty (cell-status % board)) (range total-number-of-cells)))
 
-(def horizontal-bar "\n-----------\n")
-
 (defn- formatted-mark [cell board]
   (let [status (cell-status cell board)]
     (case status
-      :player-one " X "
-      :player-two " O "
+      :player-one player-one-symbol
+      :player-two player-two-symbol
       (str " " cell " "))))
 
 (defn current-board
   ([] (current-board empty-board))
-  ([board] (str (formatted-mark 0 board) "|" (formatted-mark 1 board) "|" (formatted-mark 2 board) horizontal-bar
-                (formatted-mark 3 board) "|" (formatted-mark 4 board) "|" (formatted-mark 5 board) horizontal-bar
-                (formatted-mark 6 board) "|" (formatted-mark 7 board) "|" (formatted-mark 8 board) "\n")))
+  ([board] (str (formatted-mark 0 board) vertical-bar (formatted-mark 1 board) vertical-bar (formatted-mark 2 board) horizontal-bar
+                (formatted-mark 3 board) vertical-bar (formatted-mark 4 board) vertical-bar (formatted-mark 5 board) horizontal-bar
+                (formatted-mark 6 board) vertical-bar (formatted-mark 7 board) vertical-bar (formatted-mark 8 board) "\n")))
+
+(defn mark-many
+  ([player moves] (mark-many player moves empty-board))
+  ([player moves game-board] (if (empty? moves) game-board (mark-many player (rest moves) (mark player (first moves) game-board)))))

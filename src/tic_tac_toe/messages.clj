@@ -13,6 +13,6 @@
 
 (defn game-status [game-status]
   (case game-status
-    :player-one-wins "Player one wins!"
-    :player-two-wins "Player two wins!"
+    :player-one "Player one wins!"
+    :player-two "Player two wins!"
     "It's a tie!"))

@@ -1,5 +1,6 @@
 (ns tic-tac-toe.board-spec
   (:require [speclj.core :refer :all]
+            [clansi :as c]
             [tic-tac-toe.board :refer :all]))
 
 (describe "current marks on the game board"
@@ -44,11 +45,11 @@
         (should= false (filled? board))))
 
   (it "returns false for a non-filled board, even if there is a winner"
-      (let [board (mark :player-one 0 (mark :player-one 1 (mark :player-one 2 empty-board)))]
+      (let [board (mark-many :player-one [0 1 2])]
         (should= false (filled? board))))
 
   (it "returns true for a filled board with a winner"
-      (let [board (mark :p 0 (mark :p 1 (mark :p 2 (mark :p 3 (mark :p 4 (mark :p 5 (mark :p 6 (mark :p 7 (mark :p 8 empty-board)))))))))]
+      (let [board (mark-many :p [0 1 2 3 4 5 6 7 8])]
         (should= true (filled? board))))
 
   (it "returns true for a filled board with no winner"
@@ -58,43 +59,43 @@
 (describe "formatted marks on the board"
 
   (it "returns an empty board if there are no marks"
-      (should= (str " 0 | 1 | 2 \n"
-                    "-----------\n"
-                    " 3 | 4 | 5 \n"
-                    "-----------\n"
-                    " 6 | 7 | 8 \n") (current-board)))
+      (should= (str " 0 " vertical-bar " 1 " vertical-bar " 2 "
+                    horizontal-bar
+                    " 3 " vertical-bar " 4 " vertical-bar " 5 "
+                    horizontal-bar
+                    " 6 " vertical-bar " 7 " vertical-bar " 8 \n") (current-board)))
 
   (it "returns a board with a mark for player one"
       (let [board (mark :player-one 1 empty-board)]
-        (should= (str " 0 | X | 2 \n"
-                      "-----------\n"
-                      " 3 | 4 | 5 \n"
-                      "-----------\n"
-                      " 6 | 7 | 8 \n") (current-board board))))
+        (should= (str " 0 " vertical-bar (c/style " X " :red) vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar " 5 "
+                      horizontal-bar
+                      " 6 " vertical-bar " 7 " vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with a mark for player two"
       (let [board (mark :player-two 7 empty-board)]
-        (should= (str " 0 | 1 | 2 \n"
-                      "-----------\n"
-                      " 3 | 4 | 5 \n"
-                      "-----------\n"
-                      " 6 | O | 8 \n") (current-board board))))
+        (should= (str " 0 " vertical-bar " 1 " vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar " 5 "
+                      horizontal-bar
+                      " 6 " vertical-bar (c/style " O " :green) vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with two marks"
       (let [board (mark :player-one 5 (mark :player-two 0 empty-board))]
-        (should= (str " O | 1 | 2 \n"
-                      "-----------\n"
-                      " 3 | 4 | X \n"
-                      "-----------\n"
-                      " 6 | 7 | 8 \n") (current-board board))))
+        (should= (str (c/style " O " :green) vertical-bar " 1 " vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar (c/style " X " :red) ""
+                      horizontal-bar
+                      " 6 " vertical-bar " 7 " vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with many marks"
       (let [board (mark :player-one 1 (mark :player-two 8 (mark :player-one 5 (mark :player-two 0 empty-board))))]
-        (should= (str " O | X | 2 \n"
-                      "-----------\n"
-                      " 3 | 4 | X \n"
-                      "-----------\n"
-                      " 6 | 7 | O \n") (current-board board)))))
+        (should= (str (c/style " O " :green) vertical-bar (c/style " X " :red) vertical-bar " 2 "
+                      horizontal-bar
+                      " 3 " vertical-bar " 4 " vertical-bar (c/style " X " :red)
+                      horizontal-bar
+                      " 6 " vertical-bar " 7 " vertical-bar (c/style " O " :green) "\n") (current-board board)))))
 
 (describe "remaining spaces on the board"
 
@@ -112,3 +113,31 @@
 
   (it "returns the remaining cells if many have been marked"
       (should= [1 2 3 5 7] (remaining-spaces (mark :b 6 (mark :a 0 (mark :b 8 (mark :a 4 empty-board))))))))
+
+(describe "marking many cells at once"
+
+  (it "can mark one cell"
+      (should= [{:player-one 2}] (mark-many :player-one [2])))
+
+  (it "can mark two cells"
+      (should= [{:p2 8} {:p2 7}] (mark-many :p2 [8 7])))
+
+  (it "can mark three cells"
+      (should= [{:p1 5} {:p1 6} {:p1 7}] (mark-many :p1 [5 6 7])))
+
+  (it "can be passed a board"
+      (should= [{:p1 5} {:p1 6} {:p1 7} {:p2 4} {:p2 3} ] (mark-many :p2 [4 3] (mark-many :p1 [5 6 7])))))
+
+(describe "console symbols"
+
+  (it "returns an X for player one"
+      (should= (c/style " X " :red) player-one-symbol))
+
+  (it "returns an O for player two"
+      (should= (c/style " O " :green) player-two-symbol))
+
+  (it "returns a colored horizontal bar"
+      (should= (c/style "\n-----------\n" :white) horizontal-bar))
+
+  (it "returns a colored vertical bar"
+      (should= (c/style "|" :white) vertical-bar)))
