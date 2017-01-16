@@ -1,10 +1,14 @@
 (ns tic-tac-toe.board
-  (:require clojure.set))
+  (:require clojure.set)
+  (require [clansi :as c]))
 
 (def minimum-cell-index 0)
 (def maximum-cell-index 8)
 (def total-number-of-cells 9)
 (def empty-board [])
+
+(def player-one-symbol (c/style " X " :red))
+(def player-two-symbol (c/style " O " :green))
 
 (defn- in-range? [cell]
   (and (>= cell minimum-cell-index) (<= cell maximum-cell-index)))
@@ -29,8 +33,8 @@
 (defn- formatted-mark [cell board]
   (let [status (cell-status cell board)]
     (case status
-      :player-one " X "
-      :player-two " O "
+      :player-one player-one-symbol
+      :player-two player-two-symbol
       (str " " cell " "))))
 
 (defn current-board

@@ -1,5 +1,6 @@
 (ns tic-tac-toe.board-spec
   (:require [speclj.core :refer :all]
+            [clansi :as c]
             [tic-tac-toe.board :refer :all]))
 
 (describe "current marks on the game board"
@@ -66,7 +67,7 @@
 
   (it "returns a board with a mark for player one"
       (let [board (mark :player-one 1 empty-board)]
-        (should= (str " 0 | X | 2 \n"
+        (should= (str " 0 |" (c/style " X " :red) "| 2 \n"
                       "-----------\n"
                       " 3 | 4 | 5 \n"
                       "-----------\n"
@@ -78,23 +79,23 @@
                       "-----------\n"
                       " 3 | 4 | 5 \n"
                       "-----------\n"
-                      " 6 | O | 8 \n") (current-board board))))
+                      " 6 |" (c/style " O " :green) "| 8 \n") (current-board board))))
 
   (it "returns a board with two marks"
       (let [board (mark :player-one 5 (mark :player-two 0 empty-board))]
-        (should= (str " O | 1 | 2 \n"
+        (should= (str (c/style " O " :green) "| 1 | 2 \n"
                       "-----------\n"
-                      " 3 | 4 | X \n"
+                      " 3 | 4 |" (c/style " X " :red) "\n"
                       "-----------\n"
                       " 6 | 7 | 8 \n") (current-board board))))
 
   (it "returns a board with many marks"
       (let [board (mark :player-one 1 (mark :player-two 8 (mark :player-one 5 (mark :player-two 0 empty-board))))]
-        (should= (str " O | X | 2 \n"
+        (should= (str (c/style " O " :green) "|" (c/style " X " :red) "| 2 \n"
                       "-----------\n"
-                      " 3 | 4 | X \n"
+                      " 3 | 4 |" (c/style " X " :red) "\n"
                       "-----------\n"
-                      " 6 | 7 | O \n") (current-board board)))))
+                      " 6 | 7 |" (c/style " O " :green) "\n") (current-board board)))))
 
 (describe "remaining spaces on the board"
 
@@ -126,3 +127,11 @@
 
   (it "can be passed a board"
       (should= [{:p1 5} {:p1 6} {:p1 7} {:p2 4} {:p2 3} ] (mark-many :p2 [4 3] (mark-many :p1 [5 6 7])))))
+
+(describe "player symbols"
+
+  (it "returns an X for player one"
+      (should= (c/style " X " :red) player-one-symbol))
+
+  (it "returns an O for player two"
+      (should= (c/style " O " :green) player-two-symbol)))
