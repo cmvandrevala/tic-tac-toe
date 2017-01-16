@@ -35,12 +35,7 @@
   (sort-by #(first (vals %1)) moves-and-utilities))
 
 (defn minimax [player board cell]
-  (let [marked-board (b/mark player cell board)]
-    (if (empty? (b/remaining-spaces marked-board))
-      (gt/score (generate-game-tree player board))
-      (do
-        (println marked-board)
-        (gt/score (generate-game-tree player marked-board))))))
+  (gt/score (generate-game-tree player board)))
 
 (defn- utilities-for-remaining-cells [player board]
   (map #(hash-map %1 (minimax player board %1)) (b/remaining-spaces board)))

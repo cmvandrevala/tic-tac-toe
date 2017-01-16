@@ -96,7 +96,6 @@
           game-tree (add-child (add-many-children nil-node [10 -10]) top-node)]
       (should= -5 (score game-tree))))
 
-
   (it "scores a complicated game tree in the correct manner"
     (let [c1 (add-many-children nil-node [5 1 -5])
           c2 (add-many-children nil-node [-1 2])

@@ -148,24 +148,24 @@
       (let [current-board complementary-almost-tie-game-board]
         (should= 0 (minimax :player-two current-board 7))))
 
-  (xit "scores a winning move on a full board with a +1"
+  (it "scores a winning move on a full board with a +1"
       (let [current-board almost-tie-game-board]
         (should= 1 (minimax :player-two current-board 1))))
 
-  (xit "scores a winning move on a full board with a +1 (complementary board)"
+  (it "scores a winning move on a full board with a +1 (complementary board)"
       (let [current-board complementary-almost-tie-game-board]
         (should= 1 (minimax :player-one current-board 7))))
 
-  (xit "scores a move as -1 if the opponent can win horizontally on the next turn"
+  (it "scores a move as -1 if the opponent can win horizontally on the next turn"
       (let [current-board (b/mark-many :player-one [1 2])]
         (should= -1 (minimax :player-two current-board 7))))
 
   (it "scores a move as -1 if the opponent can win vertically on the next turn"
-      (let [current-board (b/mark-many :player-two [2 5])]
+      (let [current-board (b/mark-many :player-two [0 3])]
         (should= -1 (minimax :player-one current-board 1))))
 
   (it "scores a move as -1 if the opponent can win diagonally on the next turn"
-      (let [current-board (b/mark-many :player-two [0 4])]
+      (let [current-board (b/mark-many :player-two [2 4])]
         (should= -1 (minimax :player-one current-board 1)))))
 
 (describe "select best move"
@@ -196,22 +196,22 @@
 
 (describe "an unbeatable computer player"
 
-  (xit "takes a tie move if it is the only move available"
+  (it "takes a tie move if it is the only move available"
       (let [current-board almost-tie-game-board
             expected-output (b/mark :player-one 1 almost-tie-game-board)]
         (should= expected-output (unbeatable-ai :player-one current-board))))
 
-  (xit "takes a winning move if it is the only move available"
+  (it "takes a winning move if it is the only move available"
       (let [current-board almost-tie-game-board
             expected-output (b/mark :player-two 1 almost-tie-game-board)]
         (should= expected-output (unbeatable-ai :player-two current-board))))
 
-  (xit "takes a tie move if it is the only move available (complementary board)"
+  (it "takes a tie move if it is the only move available (complementary board)"
       (let [current-board complementary-almost-tie-game-board
             expected-output (b/mark :player-two 7 complementary-almost-tie-game-board)]
         (should= expected-output (unbeatable-ai :player-two current-board))))
 
-  (xit "takes a winning move if it is the only move available (complementary board)"
+  (it "takes a winning move if it is the only move available (complementary board)"
       (let [current-board complementary-almost-tie-game-board
             expected-output (b/mark :player-one 7 complementary-almost-tie-game-board)]
         (should= expected-output (unbeatable-ai :player-one current-board))))
@@ -232,7 +232,7 @@
         (should= expected-output (unbeatable-ai :player-one current-board))))
 
   (xit "takes a vertical winning move when it is available"
-      (let [current-board (b/mark-many :player-two [1 4])
+      (let [current-board (b/mark-many :player-one [0 2] (b/mark-many :player-two [1 4]))
             expected-output (b/mark-many :player-two [1 4 7])]
         (should= expected-output (unbeatable-ai :player-two current-board))))
 
@@ -261,7 +261,7 @@
             expected-output (b/mark :player-one 5 (b/mark-many :player-two [6 7] (b/mark-many :player-one [3 4])))]
         (should= expected-output (unbeatable-ai :player-one current-board))))
 
-  (xit "picks a winning spot over blocking a win (player two)"
+  (it "picks a winning spot over blocking a win (player two)"
       (let [current-board (b/mark-many :player-two [6 7] (b/mark-many :player-one [3 4]))
-            expected-output (b/mark :player-two 8 (b/mark-many :player-two [6 7] (b/mark-many :player-one [3 4])))]
+            expected-output (b/mark-many :player-two [6 7 8] (b/mark-many :player-one [3 4]))]
         (should= expected-output (unbeatable-ai :player-two current-board)))))
