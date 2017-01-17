@@ -36,9 +36,9 @@
 
 (defn minimax [player cell board]
   (let [marked-board (b/mark player cell board)]
-    (if (b/filled? marked-board)
-      (utility player marked-board)
-      (* -1 (gt/score (generate-game-tree (opponent player) marked-board))))))
+    (if (r/game-in-progress? marked-board)
+      (* -1 (gt/score (generate-game-tree (opponent player) marked-board)))
+      (utility player marked-board))))
 
 (defn- utilities-for-remaining-cells [player board]
   (map #(hash-map %1 (minimax player %1 board)) (b/remaining-spaces board)))
@@ -48,5 +48,9 @@
     (extract-move moves-and-utilities)))
 
 (defn unbeatable-ai [player board]
-  (let [moves-and-utilities (utilities-for-remaining-cells player board)]
-    (b/mark player (best-move moves-and-utilities) board)))
+  (cond
+    (b/empty-board? board) (b/mark player 0 board)
+    (and (= 1 (count board)) (= :empty (b/cell-status 4 board))) (b/mark player 4 board)
+    (and (= 1 (count board)) (not (= :empty (b/cell-status 4 board)))) (b/mark player 0 board)
+    :else (let [moves-and-utilities (utilities-for-remaining-cells player board)]
+            (b/mark player (best-move moves-and-utilities) board))))

@@ -24,8 +24,11 @@
     (if (get filled-cells cell) (get filled-cells cell) :empty)))
 
 (defn filled? [board]
-    (let [filled-cells (into {} (map clojure.set/map-invert board))]
-      (= (count (set (keys filled-cells))) total-number-of-cells)))
+  (let [filled-cells (into {} (map clojure.set/map-invert board))]
+    (= (count (set (keys filled-cells))) total-number-of-cells)))
+
+(defn empty-board? [board]
+  (= 0 (count board)))
 
 (defn remaining-spaces [board]
   (filter #(= :empty (cell-status % board)) (range total-number-of-cells)))

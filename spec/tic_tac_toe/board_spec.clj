@@ -56,6 +56,17 @@
       (let [board (mark :p1 0 (mark :p2 1 (mark :p3 2 (mark :p4 3 (mark :p5 4 (mark :p6 5 (mark :p7 6 (mark :p8 7 (mark :p9 8 empty-board)))))))))]
         (should= true (filled? board)))))
 
+(describe "an empty board"
+
+  (it "returns true for an empty board"
+      (should= true (empty-board? empty-board)))
+
+  (it "returns false for a board with one mark"
+      (should= false (empty-board? (mark :player-one 1 empty-board))))
+
+  (it "returns false for a board with many marks"
+      (should= false (empty-board? (mark-many :player-one [0 1 2 3])))))
+
 (describe "formatted marks on the board"
 
   (it "returns an empty board if there are no marks"

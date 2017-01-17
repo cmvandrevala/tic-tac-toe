@@ -242,6 +242,19 @@
 
 (describe "an unbeatable computer player"
 
+  (it "always starts the game off in the upper left square if it is the first player"
+      (should= (b/mark :player-one 0 b/empty-board) (unbeatable-ai :player-one b/empty-board)))
+
+  (it "takes the center spot if it is available on the second move"
+      (let [current-board (b/mark :player-one 5 b/empty-board)
+            expected-output (b/mark :player-two 4 (b/mark :player-one 5 b/empty-board))]
+        (should= expected-output (unbeatable-ai :player-two current-board))))
+
+  (it "takes the upper left hand corner if the center spot is taken on the second move"
+      (let [current-board (b/mark :player-one 4 b/empty-board)
+            expected-output (b/mark :player-two 0 (b/mark :player-one 4 b/empty-board))]
+        (should= expected-output (unbeatable-ai :player-two current-board))))
+
   (it "takes a tie move if it is the only move available"
       (let [current-board almost-tie-game-board
             expected-output (b/mark :player-one 1 almost-tie-game-board)]
@@ -265,4 +278,9 @@
   (it "it is a fatalistic computer player"
       (let [current-board (b/mark-many :player-one [0 1 3])
             expected-output (b/mark :player-two 8 (b/mark-many :player-one [0 1 3]))]
+        (should= expected-output (unbeatable-ai :player-two current-board))))
+
+  (it "properly moves on a board with a win and a tie"
+      (let [current-board (b/mark-many :player-two [1 4] (b/mark-many :player-one [0 2 5]))
+            expected-output (b/mark-many :player-two [1 4 7] (b/mark-many :player-one [0 2 5]))]
         (should= expected-output (unbeatable-ai :player-two current-board)))))
