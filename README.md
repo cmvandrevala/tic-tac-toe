@@ -2,22 +2,24 @@
 
 [![Build Status](https://travis-ci.org/cmvandrevala/tic-tac-toe.svg?branch=master)](https://travis-ci.org/cmvandrevala/tic-tac-toe)
 
-# Project
+## Project Description
 
-This is an implementation of tic-tac-toe in Clojure. I wrote it to become familiar with functional programming concepts and to learn the syntax of [Leiningen](http://leiningen.org/), [SpeclJ](http://speclj.com/), and [Clojure](https://clojure.org/). As of now, it runs a simple human vs. human game on the console with little validation of the user input. In the future, I might expand the game to include more sophisticated validation, computer players, and a game menu.
+This is an implementation of tic-tac-toe in Clojure. I wrote it to become familiar with functional programming concepts and to learn the syntax of [Leiningen](http://leiningen.org/), [SpeclJ](http://speclj.com/), and [Clojure](https://clojure.org/). A player can start a game of tic-tac-toe against another human, a first-available-move computer player, or an unbeatable computer player. Additionally, the player can choose the order in which the two opponents move. All of the games are played on the console with a colored output.
 
-# Test
+## Testing the Codebase
 
-You can run the test suite by using the command:
+You can run the SpeclJ test suite by entering the following command at the project root:
 
 ```
 lein spec
 ```
 
-# Run
+## Playing a Game
 
 You can start a game of tic-tac-toe on the console by using the command:
 
 ```
-lein run
+lein run <first-player> <second-player>
 ```
+
+The user can choose one of three options for ```<first-player>``` and ```<second-player>```: human, easy, or hard. The easy keyword corresponds to the first-available-spot computer player while the hard keyword corresponds to the unbeatable computer player. The human keyword corresponds, of course, to a human player. The order in which the options are entered dictates the order in which the players move.
