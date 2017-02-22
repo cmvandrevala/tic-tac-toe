@@ -28,19 +28,19 @@
    (condp = (validate-move cell board)
     :not-an-integer
     (do
-      (println "You must enter an integer between 0 and 8!")
+      (println messages/non-integer-input)
       board)
     :integer-too-small
     (do
-      (println "Your move must be >= 0")
+      (println messages/less-than-zero-input)
       board)
     :integer-too-large
     (do
-      (println "Your move must be <= 8")
+      (println messages/greater-than-eight-input)
       board)
     :cell-taken
     (do
-      (println "That spot has already been taken!")
+      (println messages/spot-taken-input)
       board)
     :valid-move (board/mark (current-player board) cell board))))
 
