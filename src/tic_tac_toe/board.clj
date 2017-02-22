@@ -1,16 +1,16 @@
 (ns tic-tac-toe.board
   (:require clojure.set)
-  (require [clansi :as c]))
+  (require [clansi]))
 
 (def minimum-cell-index 0)
 (def maximum-cell-index 8)
 (def total-number-of-cells 9)
 (def empty-board [])
 
-(def player-one-symbol (c/style " X " :red))
-(def player-two-symbol (c/style " O " :green))
-(def horizontal-bar (c/style "\n-----------\n" :white))
-(def vertical-bar (c/style "|" :white))
+(def player-one-symbol (clansi/style " X " :red))
+(def player-two-symbol (clansi/style " O " :green))
+(def horizontal-bar (clansi/style "\n-----------\n" :white))
+(def vertical-bar (clansi/style "|" :white))
 
 (defn- in-range? [cell]
   (and (>= cell minimum-cell-index) (<= cell maximum-cell-index)))

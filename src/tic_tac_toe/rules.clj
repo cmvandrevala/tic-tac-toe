@@ -1,5 +1,5 @@
 (ns tic-tac-toe.rules
-  (:require [tic-tac-toe.board :as b]))
+  (:require [tic-tac-toe.board :as board]))
 
 (def winning-combinations [[0 1 2] [3 4 5] [6 7 8]
                             [0 3 6] [1 4 7] [2 5 8]
@@ -9,19 +9,19 @@
   (some #{key} col))
 
 (defn- statuses [board cells]
-  (map b/cell-status cells (repeat 3 board)))
+  (map board/cell-status cells (repeat 3 board)))
 
 (defn- cells-filled [board cells]
-  (let [statuses (map b/cell-status cells (repeat 3 board))]
+  (let [statuses (map board/cell-status cells (repeat 3 board))]
     (and
       (= (count (set statuses)) 1)
-      (not= (b/cell-status (get cells 0) board) :empty))))
+      (not= (board/cell-status (get cells 0) board) :empty))))
 
 (defn game-in-progress? [board]
   (let [cells-filled-on-board (partial cells-filled board)]
     (and
       (= (set (map cells-filled-on-board winning-combinations)) #{false})
-      (not (b/filled? board)))))
+      (not (board/filled? board)))))
 
 (defn game-status [board]
   (let [board-statuses (partial statuses board)

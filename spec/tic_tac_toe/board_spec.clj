@@ -1,6 +1,6 @@
 (ns tic-tac-toe.board-spec
   (:require [speclj.core :refer :all]
-            [clansi :as c]
+            [clansi]
             [tic-tac-toe.board :refer :all]))
 
 (describe "current marks on the game board"
@@ -78,7 +78,7 @@
 
   (it "returns a board with a mark for player one"
       (let [board (mark :player-one 1 empty-board)]
-        (should= (str " 0 " vertical-bar (c/style " X " :red) vertical-bar " 2 "
+        (should= (str " 0 " vertical-bar (clansi/style " X " :red) vertical-bar " 2 "
                       horizontal-bar
                       " 3 " vertical-bar " 4 " vertical-bar " 5 "
                       horizontal-bar
@@ -90,23 +90,23 @@
                       horizontal-bar
                       " 3 " vertical-bar " 4 " vertical-bar " 5 "
                       horizontal-bar
-                      " 6 " vertical-bar (c/style " O " :green) vertical-bar " 8 \n") (current-board board))))
+                      " 6 " vertical-bar (clansi/style " O " :green) vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with two marks"
       (let [board (mark :player-one 5 (mark :player-two 0 empty-board))]
-        (should= (str (c/style " O " :green) vertical-bar " 1 " vertical-bar " 2 "
+        (should= (str (clansi/style " O " :green) vertical-bar " 1 " vertical-bar " 2 "
                       horizontal-bar
-                      " 3 " vertical-bar " 4 " vertical-bar (c/style " X " :red) ""
+                      " 3 " vertical-bar " 4 " vertical-bar (clansi/style " X " :red) ""
                       horizontal-bar
                       " 6 " vertical-bar " 7 " vertical-bar " 8 \n") (current-board board))))
 
   (it "returns a board with many marks"
       (let [board (mark :player-one 1 (mark :player-two 8 (mark :player-one 5 (mark :player-two 0 empty-board))))]
-        (should= (str (c/style " O " :green) vertical-bar (c/style " X " :red) vertical-bar " 2 "
+        (should= (str (clansi/style " O " :green) vertical-bar (clansi/style " X " :red) vertical-bar " 2 "
                       horizontal-bar
-                      " 3 " vertical-bar " 4 " vertical-bar (c/style " X " :red)
+                      " 3 " vertical-bar " 4 " vertical-bar (clansi/style " X " :red)
                       horizontal-bar
-                      " 6 " vertical-bar " 7 " vertical-bar (c/style " O " :green) "\n") (current-board board)))))
+                      " 6 " vertical-bar " 7 " vertical-bar (clansi/style " O " :green) "\n") (current-board board)))))
 
 (describe "remaining spaces on the board"
 
@@ -142,13 +142,13 @@
 (describe "console symbols"
 
   (it "returns an X for player one"
-      (should= (c/style " X " :red) player-one-symbol))
+      (should= (clansi/style " X " :red) player-one-symbol))
 
   (it "returns an O for player two"
-      (should= (c/style " O " :green) player-two-symbol))
+      (should= (clansi/style " O " :green) player-two-symbol))
 
   (it "returns a colored horizontal bar"
-      (should= (c/style "\n-----------\n" :white) horizontal-bar))
+      (should= (clansi/style "\n-----------\n" :white) horizontal-bar))
 
   (it "returns a colored vertical bar"
-      (should= (c/style "|" :white) vertical-bar)))
+      (should= (clansi/style "|" :white) vertical-bar)))

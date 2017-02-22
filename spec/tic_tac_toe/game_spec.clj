@@ -1,7 +1,7 @@
 (ns tic-tac-toe.game-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.game :refer :all]
-            [tic-tac-toe.board :as b]))
+            [tic-tac-toe.board :as board]))
 
 (defn return-board [player-one player-two board] board)
 
@@ -11,11 +11,11 @@
       (should= :player-one (current-player)))
 
   (it "is :player-two after one move"
-      (let [board (b/mark :player-one 4 b/empty-board)]
+      (let [board (board/mark :player-one 4 board/empty-board)]
         (should= :player-two (current-player board))))
 
   (it "is :player-one after two moves"
-      (let [board (b/mark :player-two 1 (b/mark :player-one 7 b/empty-board))]
+      (let [board (board/mark :player-two 1 (board/mark :player-one 7 board/empty-board))]
         (should= :player-one (current-player board)))))
 
 (describe "a move"
@@ -59,10 +59,10 @@
       (should= :not-an-integer (validate-move "abcde" board))))
 
   (it "rejects a nil input"
-    (should= :not-an-integer (validate-move nil b/empty-board)))
+    (should= :not-an-integer (validate-move nil board/empty-board)))
 
   (it "rejects a blank string input"
-    (should= :not-an-integer (validate-move "" b/empty-board))))
+    (should= :not-an-integer (validate-move "" board/empty-board))))
 
 (describe "convert a string to number"
 
@@ -84,15 +84,15 @@
 (describe "easy computer"
 
   (it "fills in the first cell of an empty board"
-      (should= [{:player-one 0}] (easy-computer b/empty-board)))
+      (should= [{:player-one 0}] (easy-computer board/empty-board)))
 
   (it "fills in the first cell if it is available"
-      (should= [{:player-one 5} {:player-two 0}] (easy-computer (b/mark :player-one 5 b/empty-board)))))
+      (should= [{:player-one 5} {:player-two 0}] (easy-computer (board/mark :player-one 5 board/empty-board)))))
 
 (describe "the play loop"
 
   (it "performs the player-one action on a blank board"
-      (should= [{:player-one 0}] (execute-play-loop return-board (partial move 0) (partial move 1) b/empty-board)))
+      (should= [{:player-one 0}] (execute-play-loop return-board (partial move 0) (partial move 1) board/empty-board)))
 
   (it "performs the player-two action on a board with one move"
-      (should= [{:player-one 0} {:player-two 1}] (execute-play-loop return-board (partial move 0) (partial move 1) (b/mark :player-one 0 b/empty-board)))))
+      (should= [{:player-one 0} {:player-two 1}] (execute-play-loop return-board (partial move 0) (partial move 1) (board/mark :player-one 0 board/empty-board)))))
