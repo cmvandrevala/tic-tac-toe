@@ -22,26 +22,30 @@
     (not (= :empty (board/cell-status cell board))) :cell-taken
     :else :valid-move))
 
+(defn- not-an-integer-action [board]
+  (println messages/non-integer-input)
+  board)
+
+(defn- integer-too-small-action [board]
+  (println messages/less-than-zero-input)
+  board)
+
+(defn- integer-too-large-action [board]
+  (println messages/greater-than-eight-input)
+  board)
+
+(defn- cell-taken-action [board]
+  (println messages/spot-taken-input)
+  board)
+
 (defn move
   ([cell] (move cell board/empty-board))
   ([cell board]
    (condp = (validate-move cell board)
-    :not-an-integer
-    (do
-      (println messages/non-integer-input)
-      board)
-    :integer-too-small
-    (do
-      (println messages/less-than-zero-input)
-      board)
-    :integer-too-large
-    (do
-      (println messages/greater-than-eight-input)
-      board)
-    :cell-taken
-    (do
-      (println messages/spot-taken-input)
-      board)
+    :not-an-integer (not-an-integer-action board)
+    :integer-too-small (integer-too-small-action board)
+    :integer-too-large (integer-too-large-action board)
+    :cell-taken (cell-taken-action board)
     :valid-move (board/mark (current-player board) cell board))))
 
 (defn- print-board [board]
